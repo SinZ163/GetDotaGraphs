@@ -15,6 +15,11 @@ def to_percent(y, position):
     else:
         return str(y) + '%'
 
+mods = {}
+with open("mods.json") as f:
+    jsonres = f.read()
+    mods = simplejson.loads(jsonres, strict=False)
+
 info = []
 with open("node_listener.json") as f:
     jsonres = f.read()
@@ -62,7 +67,7 @@ ax[3].xaxis.grid(which="minor")
 #ax[2].set_yscale('log')
 
 for mod in matchInfo:
-    print("===== " + mod + " =====")
+    print("===== " + mods[mod] + " =====")
     failInfo = OrderedDict()
     countInfo = OrderedDict()
     for matchID in matchInfo[mod]:
@@ -90,10 +95,10 @@ for mod in matchInfo:
         y2.append(failInfo[rawDate][0])
         y3.append(failInfo[rawDate][1])
         x.append(datetime.date(int(dateList[0]), int(dateList[1]), int(dateList[2])))
-    ax[0].plot_date(x, y, '-', label=mod + " (" +  str(len(matchInfo[mod])) + " Games)")
-    ax[1].plot_date(x, y2, '-', label=mod + " (" +  str(len(matchInfo[mod])) + " Games)")
-    ax[2].plot_date(x, y3, '-', label=mod + " (" +  str(len(matchInfo[mod])) + " Games)")
-    ax[3].plot_date(x, countY, '-', label=mod + " (" +  str(len(matchInfo[mod])) + " Games)")
+    ax[0].plot_date(x, y, '-', label=mods[mod] + " (" +  str(len(matchInfo[mod])) + " Games)")
+    ax[1].plot_date(x, y2, '-', label=mods[mod] + " (" +  str(len(matchInfo[mod])) + " Games)")
+    ax[2].plot_date(x, y3, '-', label=mods[mod] + " (" +  str(len(matchInfo[mod])) + " Games)")
+    ax[3].plot_date(x, countY, '-', label=mods[mod] + " (" +  str(len(matchInfo[mod])) + " Games)")
 
     print("r = " + str(numpy.corrcoef(y, countY)[0, 1]))
     print("r^2 = " + str(numpy.corrcoef(y, countY)[0, 1]**2))
