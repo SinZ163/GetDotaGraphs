@@ -40,6 +40,13 @@ for message in info:
             "numPlayers" : playerCount,
             "date_recorded" : message["date_recorded"]
         }
+fig, ax = plt.subplots()
+ax.yaxis.set_major_formatter(FuncFormatter(to_percent))
+ax.xaxis.set_major_locator(WeekdayLocator(MONDAY))
+ax.xaxis.set_major_formatter(NullFormatter())
+ax.xaxis.set_minor_locator(DayLocator())
+ax.xaxis.set_minor_formatter(DateFormatter("%a %d"))
+ax.xaxis.grid(which="minor")
 
 for mod in matchInfo:
     failInfo = {}
@@ -52,20 +59,13 @@ for mod in matchInfo:
         if len(match["ipList"]) != match["numPlayers"]:
             failInfo[date][0] = failInfo[date][0] + 1
 
-    fig, ax = plt.subplots()
     x = []
     y = []
     for rawDate in failInfo:
         dateList = rawDate.split('-')
         y.append(failInfo[rawDate][0] / float(failInfo[rawDate][1]) * 100)
         x.append(datetime.date(int(dateList[0]), int(dateList[1]), int(dateList[2])))
-    ax.plot_date(x, y, '-')
-    ax.yaxis.set_major_formatter(FuncFormatter(to_percent))
-    ax.xaxis.set_major_locator(WeekdayLocator(MONDAY))
-    ax.xaxis.set_major_formatter(NullFormatter())
-    ax.xaxis.set_minor_locator(DayLocator())
-    ax.xaxis.set_minor_formatter(DateFormatter("%a %d"))
-    ax.xaxis.grid(which="minor")
-
-    plt.title(mod)
-    plt.show()
+    ax.plot_date(x, y, '-', label=mod)
+    #plt.title(mod)
+plt.legend()
+plt.show()
