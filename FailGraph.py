@@ -1,5 +1,6 @@
 import simplejson
 import datetime
+from collections import OrderedDict
 
 import matplotlib
 from matplotlib.dates import MONDAY, WeekdayLocator, DayLocator, DateFormatter
@@ -33,7 +34,7 @@ for message in info:
         playerCount = len(matchJson["rounds"]["players"])
 
         if message["mod_id"] not in matchInfo:
-                matchInfo[message["mod_id"]] = {}
+                matchInfo[message["mod_id"]] = OrderedDict()
 
         matchInfo[message["mod_id"]][matchJson["matchID"]] = {
             "ipList" : [message["remote_ip"]],
@@ -49,7 +50,7 @@ ax.xaxis.set_minor_formatter(DateFormatter("%a %d"))
 ax.xaxis.grid(which="minor")
 
 for mod in matchInfo:
-    failInfo = {}
+    failInfo = OrderedDict()
     for matchID in matchInfo[mod]:
         match = matchInfo[mod][matchID]
         date = match["date_recorded"].split(' ')[0]
